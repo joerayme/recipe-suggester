@@ -1,0 +1,3 @@
+# Recipe Suggester
+
+A small CLI utility to take a list of ingredients, a set of recipes and suggest which recipes to make based on the list of available ingredients.
