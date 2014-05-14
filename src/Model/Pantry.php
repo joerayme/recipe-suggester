@@ -17,11 +17,20 @@ class Pantry
 
     /**
      *
-     * @param array $ingredients
+     * @var \Monolog\Logger
      */
-    public function __construct(array $ingredients)
+    protected $logger;
+
+    /**
+     *
+     * @param array           $ingredients
+     * @param \Monolog\Logger $logger      Optionally can report on out of date
+     *                                     food
+     */
+    public function __construct(array $ingredients, \Monolog\Logger $logger = null)
     {
         $this->ingredients = $ingredients;
+        $this->logger      = $logger;
     }
 
     /**
@@ -53,6 +62,11 @@ class Pantry
         {
             if ($myIngredient->isPastUseBy())
             {
+                if ($this->logger)
+                {
+                    $message = $myIngredient->getItem() . ' is past its use by date!';
+                    $this->logger->addNotice($message);
+                }
                 return false;
             }
 

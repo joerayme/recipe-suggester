@@ -43,14 +43,21 @@ class Cli
             $ingredients = $this->getIngredients($arguments[2]);
 
             $intersector = new RecipeIngredientIntersector(
-                $recipes, new Model\Pantry($ingredients)
+                $recipes, new Model\Pantry($ingredients, $this->container['logger'])
             );
 
             $suggestedRecipes = $intersector->getSuitableRecipes();
 
-            foreach ($suggestedRecipes as $recipe)
+            if (empty($suggestedRecipes))
             {
-                $this->log(\Monolog\Logger::INFO, 'You should cook ' . $recipe->getName());
+                $this->log(\Monolog\Logger::INFO, 'Order Takeout');
+            }
+            else
+            {
+                foreach ($suggestedRecipes as $recipe)
+                {
+                    $this->log(\Monolog\Logger::INFO, 'You should cook ' . $recipe->getName());
+                }
             }
         }
         catch (\RecipeSuggester\Parser\InvalidFormatException $e)
