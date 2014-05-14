@@ -9,4 +9,4 @@ require 'vendor/autoload.php';
 $container = require 'services.php';
 
 $cli = new \RecipeSuggester\Cli($container);
-$cli->run($argv);
+exit($cli->run($argv));
