@@ -13,6 +13,9 @@ namespace RecipeSuggester\Model;
  */
 class Ingredient
 {
+    public static $validUnits = array(
+        'of', 'grams', 'ml', 'slices'
+    );
 
     protected $item;
     protected $amount;
