@@ -25,7 +25,7 @@ class Ingredient
     /**
      *
      * @param string   $item
-     * @param float    $amount
+     * @param int      $amount
      * @param string   $unit
      * @param DateTime $useBy
      */

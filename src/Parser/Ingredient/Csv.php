@@ -73,7 +73,7 @@ class Csv implements \RecipeSuggester\Parser\Ingredient
         }
 
         return new \RecipeSuggester\Model\Ingredient(
-            $fields[0], floatval($fields[1]), $fields[2], $useBy
+            $fields[0], intval($fields[1]), $fields[2], $useBy
         );
     }
 }
