@@ -17,6 +17,17 @@ class Recipe
 
     protected $ingredients;
 
+    /**
+     *
+     * @param string $name
+     * @param array  $ingredients
+     */
+    public function __construct($name, array $ingredients)
+    {
+        $this->name        = $name;
+        $this->ingredients = $ingredients;
+    }
+
     public function getName()
     {
         return $this->name;
