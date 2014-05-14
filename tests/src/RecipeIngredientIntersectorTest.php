@@ -6,17 +6,19 @@ namespace RecipeSuggester;
  */
 class RecipeIngredientIntersectorTest extends \PHPUnit_Framework_TestCase
 {
-    public function intersectIngredientsProvider()
+    public function getSuitableRecipesProvider()
     {
         $breadForRecipe  = new Model\Ingredient('bread', 2, 'slices');
         $cheeseForRecipe = new Model\Ingredient('cheese', 2, 'slices');
         $saladForRecipe  = new Model\Ingredient('salad', 200, 'grams');
 
-        $availableBread    = new Model\Ingredient('bread', 10, 'slices');
+        $tomorrow = new \DateTime('tomorrow');
+
+        $availableBread    = new Model\Ingredient('bread', 10, 'slices', $tomorrow);
         $unavailableBread  = new Model\Ingredient('bread', 1, 'slices');
-        $availableCheese   = new Model\Ingredient('cheese', 10, 'slices');
+        $availableCheese   = new Model\Ingredient('cheese', 10, 'slices', $tomorrow);
         $unavailableCheese = new Model\Ingredient('cheese', 1, 'slices');
-        $availableSalad    = new Model\Ingredient('salad', 500, 'grams');
+        $availableSalad    = new Model\Ingredient('salad', 500, 'grams', new \DateTime('+2 days'));
         $unavailableSalad  = new Model\Ingredient('salad', 1, 'grams');
 
         $cheeseSandwichRecipe = new Model\Recipe('Cheese sandwich', array(
@@ -32,24 +34,43 @@ class RecipeIngredientIntersectorTest extends \PHPUnit_Framework_TestCase
             array(
                 array($availableBread, $availableCheese, $availableSalad),
                 array($cheeseSandwichRecipe, $saladSandwichRecipe),
-                array($cheeseSandwichRecipe, $saladSandwichRecipe)
+                array($cheeseSandwichRecipe, $saladSandwichRecipe),
+                $cheeseSandwichRecipe
             ),
             array(
                 array($availableBread, $availableSalad),
                 array($cheeseSandwichRecipe, $saladSandwichRecipe),
-                array($saladSandwichRecipe)
+                array($saladSandwichRecipe),
+                $saladSandwichRecipe
             )
         );
     }
 
     /**
-     * @dataProvider intersectIngredientsProvider
+     * @dataProvider getSuitableRecipesProvider
      */
-    public function testIntersectIngredients(
-        array $ingredients, array $recipes, array $expectedRecipes
+    public function testGetSuitableRecipes(
+        array $ingredients, array $recipes, array $expectedRecipes, Model\Recipe $bestRecipe
     ) {
         $intersector = new RecipeIngredientIntersector($recipes, new Model\Pantry($ingredients));
 
         $this->assertEquals($expectedRecipes, $intersector->getSuitableRecipes());
+    }
+
+    /**
+     *
+     * @param array                   $ingredients
+     * @param array                   $recipes
+     * @param array                   $expectedRecipes
+     * @param \RecipeSuggester\Recipe $bestRecipe
+     *
+     * @dataProvider getSuitableRecipesProvider
+     */
+    public function testGetBestRecipe(
+        array $ingredients, array $recipes, array $expectedRecipes, Model\Recipe $bestRecipe
+    ) {
+        $intersector = new RecipeIngredientIntersector($recipes, new Model\Pantry($ingredients));
+
+        $this->assertEquals($bestRecipe, $intersector->getBestRecipe());
     }
 }

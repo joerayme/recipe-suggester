@@ -48,4 +48,36 @@ class RecipeIngredientIntersector
 
         return $suitableRecipes;
     }
+
+    /**
+     *
+     * @return \RecipeSuggester\Model\Recipe
+     */
+    public function getBestRecipe()
+    {
+        $recipes = $this->getSuitableRecipes();
+
+        if (sizeof($recipes) === 1)
+        {
+            return $recipes[0];
+        }
+
+        if (empty($recipes))
+        {
+            return null;
+        }
+
+        foreach ($this->pantry->getInDateIngredients() as $ingredient)
+        {
+            foreach ($recipes as $recipe)
+            {
+                if ($recipe->canUseIngredient($ingredient))
+                {
+                    return $recipe;
+                }
+            }
+        }
+
+        return $recipes[0];
+    }
 }
