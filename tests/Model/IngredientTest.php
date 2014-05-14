@@ -17,7 +17,7 @@ class IngredientTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Ingredient;
+        $this->object = new Ingredient('cheese', 500, 'grams');
     }
 
     /**

@@ -19,6 +19,23 @@ class Ingredient
     protected $unit;
     protected $useBy;
 
+    /**
+     *
+     * @param string   $item
+     * @param float    $amount
+     * @param string   $unit
+     * @param DateTime $useBy
+     */
+    public function __construct($item, $amount, $unit, $useBy = null)
+    {
+        $this->setItem($item);
+        $this->setAmount($amount);
+        $this->setUnit($unit);
+        if ($useBy) {
+            $this->setUseBy($useBy);
+        }
+    }
+
     public function getItem()
     {
         return $this->item;

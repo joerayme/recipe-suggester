@@ -32,8 +32,28 @@ class Recipe
         return $this->ingredients;
     }
 
-    public function setIngredients($ingredients)
+    public function setIngredients(array $ingredients)
     {
         $this->ingredients = $ingredients;
+    }
+
+    /**
+     * Given an ingredient, determines whether it can be used in this recipe
+     *
+     */
+    public function canUseIngredient(Ingredient $ingredient)
+    {
+        foreach ($this->ingredients as $myIngredient)
+        {
+            // Ensure we compare like with like - the ingredient name as well as
+            // the unit it's measured in
+            if ($myIngredient->getItem() == $ingredient->getItem()
+                && $myIngredient->getUnit() == $ingredient->getUnit()
+            ) {
+                return $myIngredient->getAmount() <= $ingredient->getAmount();
+            }
+        }
+
+        return false;
     }
 }
