@@ -43,6 +43,11 @@ class Recipe
      */
     public function canUseIngredient(Ingredient $ingredient)
     {
+        if ($ingredient->isPastUseBy())
+        {
+            return false;
+        }
+
         foreach ($this->ingredients as $myIngredient)
         {
             // Ensure we compare like with like - the ingredient name as well as

@@ -52,5 +52,8 @@ class RecipeTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(
             $this->object->canUseIngredient(new Ingredient('brot', 50, 'slices'))
         );
+        $this->assertFalse(
+            $this->object->canUseIngredient(new Ingredient('bread', 10, 'slices', new \DateTime('yesterday')))
+        );
     }
 }
