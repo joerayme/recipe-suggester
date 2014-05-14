@@ -46,18 +46,15 @@ class Cli
                 $recipes, new Model\Pantry($ingredients, $this->container['logger'])
             );
 
-            $suggestedRecipes = $intersector->getSuitableRecipes();
+            $suggestedRecipe = $intersector->getBestRecipe();
 
-            if (empty($suggestedRecipes))
+            if (empty($suggestedRecipe))
             {
                 $this->log(\Monolog\Logger::INFO, 'Order Takeout');
             }
             else
             {
-                foreach ($suggestedRecipes as $recipe)
-                {
-                    $this->log(\Monolog\Logger::INFO, 'You should cook ' . $recipe->getName());
-                }
+                $this->log(\Monolog\Logger::INFO, 'You should cook ' . $suggestedRecipe->getName());
             }
         }
         catch (\RecipeSuggester\Parser\InvalidFormatException $e)
