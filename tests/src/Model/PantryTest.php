@@ -11,9 +11,10 @@ class PantryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->pantry = new Pantry(array(
-            new Ingredient('bread', 10, 'slices'),
-            new Ingredient('cheese', 10, 'slices'),
-            new Ingredient('salad', 500, 'grams')
+            new Ingredient('bread', 10, 'slices', new \DateTime('tomorrow')),
+            new Ingredient('salad', 500, 'grams', new \DateTime('+2 days')),
+            new Ingredient('cheese', 10, 'slices', new \DateTime('tomorrow')),
+            new Ingredient('ham', 300, 'grams', new \DateTime('yesterday'))
         ));
     }
 
@@ -38,6 +39,15 @@ class PantryTest extends \PHPUnit_Framework_TestCase
                 true
             ),
             array(
+                'Ham salad sandwich',
+                array(
+                    new Ingredient('bread', 2, 'slices'),
+                    new Ingredient('ham', 100, 'grams'),
+                    new Ingredient('salad', 100, 'grams'),
+                ),
+                false
+            ),
+            array(
                 'Peanut butter sandwich',
                 array(
                     new Ingredient('bread', 2, 'slices'),
@@ -55,10 +65,24 @@ class PantryTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasIngredientsForRecipe($name, array $ingredients, $expectedResult)
     {
+        $message = 'Pantry should ' . ($expectedResult ? '' : 'not ') . 'have ';
+        $message .= 'ingredients for ' . $name;
         $this->assertEquals($expectedResult,
             $this->pantry->hasIngredientsForRecipe(
                 new Recipe($name, $ingredients)
-            )
+            ),
+            $message
         );
+    }
+
+    /**
+     * @covers RecipeSuggester\Model\Pantry::getInDateIngredients
+     */
+    public function testGetInDateIngredients()
+    {
+        $ingredients = $this->pantry->getInDateIngredients();
+
+        $this->assertEquals(3, sizeof($ingredients), 'There should only be 3 in date ingredients');
+        $this->assertEquals('salad', $ingredients[2]->getItem());
     }
 }

@@ -30,6 +30,7 @@ class Pantry
     public function __construct(array $ingredients, \Monolog\Logger $logger = null)
     {
         $this->ingredients = $ingredients;
+        usort($this->ingredients, array('\\RecipeSuggester\\Model\\Pantry', 'compareIngredients'));
         $this->logger      = $logger;
     }
 
@@ -60,25 +61,53 @@ class Pantry
     {
         foreach ($this->ingredients as $myIngredient)
         {
-            if ($myIngredient->isPastUseBy())
-            {
-                if ($this->logger)
-                {
-                    $message = $myIngredient->getItem() . ' is past its use by date!';
-                    $this->logger->addNotice($message);
-                }
-                return false;
-            }
-
             // Ensure we compare like with like - the ingredient name as well as
             // the unit it's measured in
             if ($myIngredient->getItem() == $ingredient->getItem()
                 && $myIngredient->getUnit() == $ingredient->getUnit()
             ) {
+                if ($myIngredient->isPastUseBy())
+                {
+                    if ($this->logger)
+                    {
+                        $message = $myIngredient->getItem() . ' is past its use by date!';
+                        $this->logger->addNotice($message);
+                    }
+                    return false;
+                }
+
                 return $myIngredient->getAmount() >= $ingredient->getAmount();
             }
         }
 
         return false;
+    }
+
+    /**
+     * Gets the ingredients that are in date ordered by their use-by date
+     *
+     * @return array
+     */
+    public function getInDateIngredients()
+    {
+        return array_values(array_filter($this->ingredients, function(Ingredient $i) {
+            return !$i->isPastUseBy();
+        }));
+    }
+
+    /**
+     * Comparator function for usort
+     *
+     * @param \RecipeSuggester\Model\Ingredient $a
+     * @param \RecipeSuggester\Model\Ingredient $b
+     */
+    public static function compareIngredients(Ingredient $a, Ingredient $b)
+    {
+        if ($a->getUseBy() == $b->getUseBy())
+        {
+            return 0;
+        }
+
+        return $a->getUseBy() > $b->getUseBy() ? 1 : -1;
     }
 }
