@@ -28,9 +28,17 @@ class IngredientTest extends \PHPUnit_Framework_TestCase
     {
         $useByDate = new \DateTime('2014-01-01');
 
+        // Can't be past its use by if one hasn't been set yet
+        $this->assertFalse($this->object->isPastUseBy(new \DateTime('2013-01-01')));
+
         $this->object->setUseBy($useByDate);
-        $this->assertTrue($this->object->isPastUseBy(new \DateTime('2013-01-01')));
-        $this->assertFalse($this->object->isPastUseBy(new \DateTime('2014-02-01')));
-        $this->assertFalse($this->object->isPastUseBy(new \DateTime('2014-01-01')));
+        $this->assertFalse($this->object->isPastUseBy(new \DateTime('2013-01-01')));
+        $this->assertTrue($this->object->isPastUseBy(new \DateTime('2014-02-01')));
+        $this->assertTrue($this->object->isPastUseBy(new \DateTime('2014-01-01')));
+
+        $this->object->setUseBy(new \DateTime('today'));
+        $this->assertFalse($this->object->isPastUseBy(new \DateTime('yesterday')));
+        $this->assertTrue($this->object->isPastUseBy(new \DateTime('today')));
+        $this->assertTrue($this->object->isPastUseBy());
     }
 }
