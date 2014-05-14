@@ -37,33 +37,50 @@ class Cli
         $this->log(\Monolog\Logger::INFO, 'RecipeSuggester Version ' . self::VERSION);
         $this->log(\Monolog\Logger::INFO, '');
 
+        if (sizeof($arguments) != 3)
+        {
+            return $this->displayUsage();
+        }
+
         try
         {
             $recipes = $this->getRecipes($arguments[1]);
             $ingredients = $this->getIngredients($arguments[2]);
-
-            $intersector = new RecipeIngredientIntersector(
-                $recipes, new Model\Pantry($ingredients, $this->container['logger'])
-            );
-
-            $suggestedRecipe = $intersector->getBestRecipe();
-
-            if (empty($suggestedRecipe))
-            {
-                $this->log(\Monolog\Logger::INFO, 'Order Takeout');
-            }
-            else
-            {
-                $this->log(\Monolog\Logger::INFO, 'You should cook ' . $suggestedRecipe->getName());
-            }
         }
         catch (\RecipeSuggester\Parser\InvalidFormatException $e)
         {
             $this->log(\Monolog\Logger::ERROR, $e->getMessage());
-            return 1;
+            return $this->displayUsage();
+        }
+
+        $intersector = new RecipeIngredientIntersector(
+            $recipes, new Model\Pantry($ingredients, $this->container['logger'])
+        );
+
+        $suggestedRecipe = $intersector->getBestRecipe();
+
+        if (empty($suggestedRecipe))
+        {
+            $this->log(\Monolog\Logger::INFO, 'Order Takeout');
+        }
+        else
+        {
+            $this->log(\Monolog\Logger::INFO, 'You should cook ' . $suggestedRecipe->getName());
         }
 
         return 0;
+    }
+
+    /**
+     * Displays CLI usage text
+     */
+    protected function displayUsage()
+    {
+        $message = "Usage: php recipesuggest.php <recipe file> <ingredients file>";
+        $this->log(\Monolog\Logger::INFO, $message);
+        $this->log(\Monolog\Logger::INFO, '');
+
+        return 1;
     }
 
     /**
