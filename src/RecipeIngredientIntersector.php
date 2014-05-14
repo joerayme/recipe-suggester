@@ -16,17 +16,17 @@ namespace RecipeSuggester;
 class RecipeIngredientIntersector
 {
     protected $recipes;
-    protected $ingredients;
+    protected $pantry;
 
     /**
      *
      * @param array $recipes
      * @param array $ingredients
      */
-    public function __construct(array $recipes, array $ingredients)
+    public function __construct(array $recipes, Model\Pantry $pantry)
     {
-        $this->recipes     = $recipes;
-        $this->ingredients = $ingredients;
+        $this->recipes = $recipes;
+        $this->pantry  = $pantry;
     }
 
     /**
@@ -40,13 +40,9 @@ class RecipeIngredientIntersector
 
         foreach ($this->recipes as $recipe)
         {
-            foreach ($this->ingredients as $ingredient)
+            if ($this->pantry->hasIngredientsForRecipe($recipe))
             {
-                if ($recipe->canUseIngredient($ingredient))
-                {
-                    $suitableRecipes[] = $recipe;
-                    break;
-                }
+                $suitableRecipes[] = $recipe;
             }
         }
 

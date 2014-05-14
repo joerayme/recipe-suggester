@@ -33,6 +33,11 @@ class RecipeIngredientIntersectorTest extends \PHPUnit_Framework_TestCase
                 array($availableBread, $availableCheese, $availableSalad),
                 array($cheeseSandwichRecipe, $saladSandwichRecipe),
                 array($cheeseSandwichRecipe, $saladSandwichRecipe)
+            ),
+            array(
+                array($availableBread, $availableSalad),
+                array($cheeseSandwichRecipe, $saladSandwichRecipe),
+                array($saladSandwichRecipe)
             )
         );
     }
@@ -43,7 +48,7 @@ class RecipeIngredientIntersectorTest extends \PHPUnit_Framework_TestCase
     public function testIntersectIngredients(
         array $ingredients, array $recipes, array $expectedRecipes
     ) {
-        $intersector = new RecipeIngredientIntersector($recipes, $ingredients);
+        $intersector = new RecipeIngredientIntersector($recipes, new Model\Pantry($ingredients));
 
         $this->assertEquals($expectedRecipes, $intersector->getSuitableRecipes());
     }
