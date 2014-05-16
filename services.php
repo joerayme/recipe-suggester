@@ -6,7 +6,7 @@
 
 $container = new Pimple();
 
-$container['logger'] = function($c) {
+$container['logger'] = function ($c) {
     $logger = new Monolog\Logger('main_logger');
 
     $handler = new Monolog\Handler\StreamHandler('php://stdout');
@@ -16,11 +16,11 @@ $container['logger'] = function($c) {
     return $logger;
 };
 
-$container['recipe.parser'] = function($c) {
+$container['recipe.parser'] = function ($c) {
     return new \RecipeSuggester\Parser\Recipe\Json();
 };
 
-$container['ingredient.parser'] = function($c) {
+$container['ingredient.parser'] = function ($c) {
     return new RecipeSuggester\Parser\Ingredient\Csv();
 };
 

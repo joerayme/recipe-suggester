@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * (c) 2013 Joseph Ray <joe@joeray.me>
  */
 

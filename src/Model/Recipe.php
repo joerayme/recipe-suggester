@@ -54,13 +54,11 @@ class Recipe
      */
     public function canUseIngredient(Ingredient $ingredient)
     {
-        if ($ingredient->isPastUseBy())
-        {
+        if ($ingredient->isPastUseBy()) {
             return false;
         }
 
-        foreach ($this->ingredients as $myIngredient)
-        {
+        foreach ($this->ingredients as $myIngredient) {
             // Ensure we compare like with like - the ingredient name as well as
             // the unit it's measured in
             if ($myIngredient->getItem() == $ingredient->getItem()

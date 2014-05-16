@@ -34,8 +34,7 @@ class Ingredient
         $this->setItem($item);
         $this->setAmount($amount);
         $this->setUnit($unit);
-        if ($useBy)
-        {
+        if ($useBy) {
             $this->setUseBy($useBy);
         }
     }
@@ -82,19 +81,17 @@ class Ingredient
 
     /**
      *
-     * @param \DateTime $comparator The DateTime to compare to. If none is
-     *                              provided, defaults to today.
+     * @param  \DateTime $comparator The DateTime to compare to. If none is
+     *                               provided, defaults to today.
      * @return boolean
      */
     public function isPastUseBy(\DateTime $comparator = null)
     {
-        if ($this->useBy === null)
-        {
+        if ($this->useBy === null) {
             return false;
         }
 
-        if ($comparator === null)
-        {
+        if ($comparator === null) {
             $comparator = new \DateTime('today');
         }
 

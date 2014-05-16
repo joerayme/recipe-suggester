@@ -40,10 +40,8 @@ class Pantry
      */
     public function hasIngredientsForRecipe(Recipe $recipe)
     {
-        foreach($recipe->getIngredients() as $ingredient)
-        {
-            if (!$this->hasIngredient($ingredient))
-            {
+        foreach ($recipe->getIngredients() as $ingredient) {
+            if (!$this->hasIngredient($ingredient)) {
                 return false;
             }
         }
@@ -54,25 +52,23 @@ class Pantry
     /**
      * Checks to see if we have enough of the recipe's ingredient
      *
-     * @param \RecipeSuggester\Model\Ingredient $ingredient
+     * @param  \RecipeSuggester\Model\Ingredient $ingredient
      * @return boolean
      */
     protected function hasIngredient(Ingredient $ingredient)
     {
-        foreach ($this->ingredients as $myIngredient)
-        {
+        foreach ($this->ingredients as $myIngredient) {
             // Ensure we compare like with like - the ingredient name as well as
             // the unit it's measured in
             if ($myIngredient->getItem() == $ingredient->getItem()
                 && $myIngredient->getUnit() == $ingredient->getUnit()
             ) {
-                if ($myIngredient->isPastUseBy())
-                {
-                    if ($this->logger)
-                    {
+                if ($myIngredient->isPastUseBy()) {
+                    if ($this->logger) {
                         $message = $myIngredient->getItem() . ' is past its use by date!';
                         $this->logger->addNotice($message);
                     }
+
                     return false;
                 }
 
@@ -90,7 +86,7 @@ class Pantry
      */
     public function getInDateIngredients()
     {
-        return array_values(array_filter($this->ingredients, function(Ingredient $i) {
+        return array_values(array_filter($this->ingredients, function (Ingredient $i) {
             return !$i->isPastUseBy();
         }));
     }
@@ -103,8 +99,7 @@ class Pantry
      */
     public static function compareIngredients(Ingredient $a, Ingredient $b)
     {
-        if ($a->getUseBy() == $b->getUseBy())
-        {
+        if ($a->getUseBy() == $b->getUseBy()) {
             return 0;
         }
 

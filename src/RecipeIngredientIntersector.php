@@ -38,10 +38,8 @@ class RecipeIngredientIntersector
     {
         $suitableRecipes = array();
 
-        foreach ($this->recipes as $recipe)
-        {
-            if ($this->pantry->hasIngredientsForRecipe($recipe))
-            {
+        foreach ($this->recipes as $recipe) {
+            if ($this->pantry->hasIngredientsForRecipe($recipe)) {
                 $suitableRecipes[] = $recipe;
             }
         }
@@ -57,22 +55,17 @@ class RecipeIngredientIntersector
     {
         $recipes = $this->getSuitableRecipes();
 
-        if (sizeof($recipes) === 1)
-        {
+        if (sizeof($recipes) === 1) {
             return $recipes[0];
         }
 
-        if (empty($recipes))
-        {
+        if (empty($recipes)) {
             return null;
         }
 
-        foreach ($this->pantry->getInDateIngredients() as $ingredient)
-        {
-            foreach ($recipes as $recipe)
-            {
-                if ($recipe->canUseIngredient($ingredient))
-                {
+        foreach ($this->pantry->getInDateIngredients() as $ingredient) {
+            foreach ($recipes as $recipe) {
+                if ($recipe->canUseIngredient($ingredient)) {
                     return $recipe;
                 }
             }

@@ -18,7 +18,6 @@ class PantryTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
-
     public function hasIngredientsForRecipeProvider()
     {
         return array(
@@ -57,7 +56,6 @@ class PantryTest extends \PHPUnit_Framework_TestCase
             )
         );
     }
-
 
     /**
      * @covers RecipeSuggester\Model\Pantry::hasIngredientsForRecipe

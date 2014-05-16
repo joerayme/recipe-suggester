@@ -37,19 +37,16 @@ class Cli
         $this->log(\Monolog\Logger::INFO, 'RecipeSuggester Version ' . self::VERSION);
         $this->log(\Monolog\Logger::INFO, '');
 
-        if (sizeof($arguments) != 3)
-        {
+        if (sizeof($arguments) != 3) {
             return $this->displayUsage();
         }
 
-        try
-        {
+        try {
             $recipes = $this->getRecipes($arguments[1]);
             $ingredients = $this->getIngredients($arguments[2]);
-        }
-        catch (\RecipeSuggester\Parser\InvalidFormatException $e)
-        {
+        } catch (\RecipeSuggester\Parser\InvalidFormatException $e) {
             $this->log(\Monolog\Logger::ERROR, $e->getMessage());
+
             return $this->displayUsage();
         }
 
@@ -59,12 +56,9 @@ class Cli
 
         $suggestedRecipe = $intersector->getBestRecipe();
 
-        if (empty($suggestedRecipe))
-        {
+        if (empty($suggestedRecipe)) {
             $this->log(\Monolog\Logger::INFO, 'Order Takeout');
-        }
-        else
-        {
+        } else {
             $this->log(\Monolog\Logger::INFO, 'You should cook ' . $suggestedRecipe->getName());
         }
 
@@ -85,38 +79,39 @@ class Cli
 
     /**
      *
-     * @param string $recipeFile The filename of the recipes file
+     * @param  string $recipeFile The filename of the recipes file
      * @return array
      */
     protected function getRecipes($recipeFile)
     {
         $contents = file_get_contents($recipeFile);
+
         return $this->container['recipe.parser']->parse($contents);
     }
 
     /**
      *
-     * @param array $ingredientsFile
+     * @param  array $ingredientsFile
      * @return array
      */
     protected function getIngredients($ingredientsFile)
     {
         $contents = file_get_contents($ingredientsFile);
+
         return $this->container['ingredient.parser']->parse($contents);
     }
 
     /**
      *
-     * @param mixed  $level
-     * @param string $message
+     * @param  mixed                     $level
+     * @param  string                    $message
      * @throws \InvalidArgumentException
      */
     protected function log($level, $message)
     {
         $logger = $this->container['logger'];
 
-        if (!isset($logger) || !is_object($logger) || !method_exists($logger, 'log'))
-        {
+        if (!isset($logger) || !is_object($logger) || !method_exists($logger, 'log')) {
             throw new \InvalidArgumentException('Logger incorrectly configured');
         }
 

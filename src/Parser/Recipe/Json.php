@@ -22,18 +22,15 @@ class Json extends \RecipeSuggester\Parser\Recipe
         $return  = array();
         $recipes = json_decode($string, false);
 
-        if (!$recipes)
-        {
+        if (!$recipes) {
             throw new \RecipeSuggester\Parser\InvalidFormatException('Invalid JSON in recipe list');
         }
 
-        if (!is_array($recipes) || empty($recipes))
-        {
+        if (!is_array($recipes) || empty($recipes)) {
             throw new \RecipeSuggester\Parser\InvalidFormatException('No recpies provided in JSON');
         }
 
-        foreach ($recipes as $recipeRaw)
-        {
+        foreach ($recipes as $recipeRaw) {
             $return[] = self::createRecipeFromDataObject($recipeRaw);
         }
 

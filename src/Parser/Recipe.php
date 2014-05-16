@@ -13,14 +13,13 @@ namespace RecipeSuggester\Parser;
 abstract class Recipe implements \RecipeSuggester\Parser
 {
     /**
-     * 
-     * @param \stdClass $object
+     *
+     * @param  \stdClass                     $object
      * @return \RecipeSuggester\Model\Recipe
      */
     protected static function createRecipeFromDataObject(\stdClass $object)
     {
-        if (!isset($object->name))
-        {
+        if (!isset($object->name)) {
             throw new InvalidFormatException('Invalid recipe list: recipe name was not provided');
         }
 
@@ -38,16 +37,15 @@ abstract class Recipe implements \RecipeSuggester\Parser
 
     /**
      *
-     * @param string $name
-     * @param array  $ingredients
+     * @param  string $name
+     * @param  array  $ingredients
      * @return array
      */
     protected static function createIngredientsFromDataObjects($name, array $ingredients)
     {
         $return = array();
 
-        foreach ($ingredients as $ingredient)
-        {
+        foreach ($ingredients as $ingredient) {
             if (!isset($ingredient->item, $ingredient->amount, $ingredient->unit)
                 || !is_numeric($ingredient->amount)
                 || !in_array($ingredient->unit, \RecipeSuggester\Model\Ingredient::$validUnits))
