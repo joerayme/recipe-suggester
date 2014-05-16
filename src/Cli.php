@@ -84,6 +84,11 @@ class Cli
      */
     protected function getRecipes($recipeFile)
     {
+        if (!file_exists($recipeFile)) {
+            $this->log(\Monolog\Logger::ERROR, "Your recipe file '$recipeFile' does not exist");
+            return array();
+        }
+
         $contents = file_get_contents($recipeFile);
 
         return $this->container['recipe.parser']->parse($contents);
@@ -91,11 +96,16 @@ class Cli
 
     /**
      *
-     * @param  array $ingredientsFile
+     * @param  string $ingredientsFile The filename of the ingredients file
      * @return array
      */
     protected function getIngredients($ingredientsFile)
     {
+        if (!file_exists($ingredientsFile)) {
+            $this->log(\Monolog\Logger::ERROR, "Your ingredients file '$ingredientsFile' does not exist");
+            return array();
+        }
+
         $contents = file_get_contents($ingredientsFile);
 
         return $this->container['ingredient.parser']->parse($contents);
