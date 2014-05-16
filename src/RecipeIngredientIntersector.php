@@ -15,7 +15,16 @@ namespace RecipeSuggester;
  */
 class RecipeIngredientIntersector
 {
+    /**
+     *
+     * @var array
+     */
     protected $recipes;
+
+    /**
+     *
+     * @var \RecipeSuggester\Model\Pantry
+     */
     protected $pantry;
 
     /**
